@@ -6,7 +6,8 @@ A Python ML boilerplate based on Cookiecutter Data Science, providing support fo
 <br/>
 
 ## Table of Contents
-1. [Cookiecutter](#cookiecutter)
+1. [Initial Recommendations](#initial-recommendations)
+2. [Cookiecutter](#cookiecutter)
     1. [Cookiecutter Data science Setup](#cookiecutter-data-science-setup)
     2. [Project Organization](#project-organization)
 3. [DVC](#dvc)
@@ -14,6 +15,19 @@ A Python ML boilerplate based on Cookiecutter Data Science, providing support fo
     2. [DVC usage](#dvc-usage)
     3. [Troubleshooting](#troubleshooting)
 4. [MLFlow](#mlflow)
+
+
+<br/>
+
+## Initial Recommendations
+Before starting to work with this boilerplate, create and activate a python virtual environment using _venv_
+
+```
+python -m venv <venv_name>
+<venv_name>\Scripts\activate
+pip install -r requirements.txt
+```
+
 
 <br/>
 
@@ -28,16 +42,20 @@ A Python ML boilerplate based on Cookiecutter Data Science, providing support fo
 This project was created with the following steps:
 1) [Installing](https://cookiecutter.readthedocs.io/en/stable/installation.html) cookiecutter on the host machine with PiP
 
-    `python3 -m pip install --user cookiecutter`
+    ```
+    python3 -m pip install --user cookiecutter
+    ```
 
 2) [Initializing](https://drivendata.github.io/cookiecutter-data-science/) the project directly from github:
 
-    `python -m cookiecutter https://github.com/drivendata/cookiecutter-data-science`
+    ```
+    python -m cookiecutter https://github.com/drivendata/cookiecutter-data-science
+    ```
 
 3) Filling in the required information
 4) Creating a github repository from the Web Interface and adding it as remote:
 
-    `
+    ```
     echo "# ml-boilerplate" >> README.md
     git init
     git add README.md
@@ -45,7 +63,7 @@ This project was created with the following steps:
     git branch -M main
     git remote add origin https://github.com/gianfrancodemarco/ml-boilerplate.git
     git push -u origin main
-    `
+    ```
 
 <br/>
 <br/>
@@ -121,24 +139,37 @@ DVC will:
 
 1) Install DVC
 
-    `pip install dvc`
+    ```
+    pip install dvc
+    ```
 
 2) Init DVC
 
-    `dvc init`
+    ```
+    dvc init
+    ```
 
 3) Use `dvc get` to download a sample dataset (Optional) 
     
-    `dvc get https://github.com/iterative/dataset-registry get-started/data.xml -o data/raw/data.xml`
+    ```
+    dvc get https://github.com/iterative/dataset-registry get-started/data.xml -o data/raw/data.xml
+    ```
 
 4) Add a DVC remote (Google Drive)
 
     a) Create a folder for DVC on Google Drive
+    
     b) Open the folder and grab the folder id from the url bar
-    c) `dvc remote add -d storage gdrive://<folder_id>'
+    
+    c) 
+    ```
+    dvc remote add -d storage gdrive://<folder_id>
+    ```
 
 5) Push the data to the configured remote
-    `dvc push`
+    ```
+    dvc push
+    ```
 
 <br/>
 
@@ -148,25 +179,37 @@ DVC will:
 
 - Add data to DVC tracking:
 
-    `dvc add <file_or_folder_to_track>`
+    ```
+    dvc add <file_or_folder_to_track>
+    ```
     
-    E.g: `dvc add data/raw`
+    E.g: 
+    ```
+    dvc add data/raw
+    ```
 
     Then:
     
-    `git add data\raw.dvc data\.gitignore`
-    `git commit ...`
-    `git push`
-    `dvc push`
+    ```
+    git add data\raw.dvc data\.gitignore
+    git commit ...
+    git push
+    dvc push
+    ```
 
 - Pull data from DVC
 
-    `dvc pull`
+    ```
+    dvc pull
+    ```
 
 - Checkout a previous DVC version
     
     1) git checkout to the desired version the .dvc file corresponding to the data we want to checkout
-    2) `dvc checkout` 
+    2)
+        ```
+        dvc checkout
+        ``` 
 
 <br/>
 
@@ -176,8 +219,43 @@ DVC will:
 - If pulling from gdrive fails with the error "file has been identified as malware or spam and cannot be 
 downloaded dvc" run:
 
-    `dvc remote modify <myremote> gdrive_acknowledge_abuse true`
+    ```
+    dvc remote modify <myremote> gdrive_acknowledge_abuse true
+    ```
 
 <br/>
 
 ## MLFlow
+
+MLflow is an open source platform to manage the ML lifecycle, including experimentation, reproducibility, deployment, and a central model registry. MLflow currently offers four components:
+
+## MLFlow setup
+
+1. Installing MLflow
+
+    ```
+    pip install -r mlflow-requirements.txt
+    ```
+
+2. Start the UI
+
+## Using setup
+- Logging metrics, params and artifacts
+
+    ```
+    from mlflow import log_metric, log_param, log_artifacts
+    
+    ...
+
+    # Log a parameter (key-value pair)
+    log_param("param1", randint(0, 100))
+
+    # Log a metric; metrics can be updated throughout the run
+    log_metric("foo", random())
+    log_metric("foo", random() + 1)
+    log_metric("foo", random() + 2)
+
+    # Log an artifact (output file)
+    ...
+    log_artifacts("src/examples/outputs")
+    ```

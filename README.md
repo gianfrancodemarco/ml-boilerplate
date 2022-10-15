@@ -102,6 +102,12 @@ Data Version Control is a data versioning, ML workflow automation, and experimen
     
     `dvc get https://github.com/iterative/dataset-registry get-started/data.xml -o data/raw/data.xml`
 
+4) Add a DVC remote (Google Drive)
+
+    a) Create a folder for DVC on Google Drive
+    b) Open the folder and grab the folder id from the url bar
+    c) `dvc remote add -d storage gdrive://1hVhI2a6XqiOBVFYbA8wCVbVfm5eduJZ9'
+
 ### DVC usage
 
 - Add data to dvc tracking:

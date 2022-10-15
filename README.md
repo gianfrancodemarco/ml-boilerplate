@@ -73,4 +73,44 @@ Project Organization
 --------
 
 4) Creating a github repository from the Web Interface and adding it as remote:
-    `git remote add origin https://github.com/gianfrancodemarco/ml-boilerplate.git`
+
+    `
+    echo "# ml-boilerplate" >> README.md
+    git init
+    git add README.md
+    git commit -m "first commit"
+    git branch -M main
+    git remote add origin https://github.com/gianfrancodemarco/ml-boilerplate.git
+    git push -u origin main
+    `
+
+## DVC
+
+Data Version Control is a data versioning, ML workflow automation, and experiment management tool that takes advantage of the existing software engineering toolset you're already familiar with (Git, your IDE, CI/CD, etc.). 
+
+### DCV setup (WINDOWS)
+
+1) Install DVC
+
+    `pip install dvc`
+
+2) Init DVC
+
+    `dvc init`
+
+3) Use `dvc get` to download a sample dataset (Optional) 
+    
+    `dvc get https://github.com/iterative/dataset-registry get-started/data.xml -o data/raw/data.xml`
+
+### DVC usage
+
+- Add data to dvc tracking:
+
+    `dvc add <file_or_folder_to_track>`
+    
+    E.g: `dvc add data/raw`
+
+    Then:
+    
+    `git add data\raw.dvc data\.gitignore`
+

@@ -3,9 +3,25 @@ ml-boilerplate
 
 A Python ML boilerplate based on Cookiecutter Data Science, providing support for data versioning (DVC), experiment tracking, Model&Dataset cards, etc.
 
+<br/>
+
+## Table of Contents
+1. [Cookiecutter](#cookiecutter)
+    1. [Cookiecutter Data science Setup](#cookiecutter-data-science-setup)
+    2. [Project Organization](#project-organization)
+3. [DVC](#dvc)
+    1. [DVC setup (Windows)](#dcv-setup-windows)
+    2. [DVC usage](#dvc-usage)
+    3. [Troubleshooting](#troubleshooting)
+4. [MLFlow](#mlflow)
+
+<br/>
+
 ## Cookiecutter
 
 [Cookiecutter](https://github.com/cookiecutter/cookiecutter) is a command-line utility that creates projects from cookiecutters (project templates), e.g. creating a Python package project from a Python package project template.
+
+<br/>
 
 ### Cookiecutter Data science Setup
 
@@ -19,9 +35,22 @@ This project was created with the following steps:
     `python -m cookiecutter https://github.com/drivendata/cookiecutter-data-science`
 
 3) Filling in the required information
+4) Creating a github repository from the Web Interface and adding it as remote:
 
+    `
+    echo "# ml-boilerplate" >> README.md
+    git init
+    git add README.md
+    git commit -m "first commit"
+    git branch -M main
+    git remote add origin https://github.com/gianfrancodemarco/ml-boilerplate.git
+    git push -u origin main
+    `
 
-Project Organization
+<br/>
+<br/>
+
+### Project Organization
 ------------
 
     ├── LICENSE
@@ -72,23 +101,23 @@ Project Organization
 
 --------
 
-4) Creating a github repository from the Web Interface and adding it as remote:
-
-    `
-    echo "# ml-boilerplate" >> README.md
-    git init
-    git add README.md
-    git commit -m "first commit"
-    git branch -M main
-    git remote add origin https://github.com/gianfrancodemarco/ml-boilerplate.git
-    git push -u origin main
-    `
+<br/>
+<br/>
 
 ## DVC
 
-Data Version Control is a data versioning, ML workflow automation, and experiment management tool that takes advantage of the existing software engineering toolset you're already familiar with (Git, your IDE, CI/CD, etc.). 
+Data Version Control is a data versioning, ML workflow automation, and experiment management tool that takes advantage of the existing software engineering toolset you're already familiar with (Git, your IDE, CI/CD, 
+etc.). 
 
-### DCV setup (WINDOWS)
+DVC will:
+
+- upload the data files to a remote (the data files will be ignored by GIT)
+- create pointers (.dvc files) to those files (the pointers will be stored in GIT)
+
+<br/>
+
+### DCV setup (Windows)
+<br/>
 
 1) Install DVC
 
@@ -106,11 +135,18 @@ Data Version Control is a data versioning, ML workflow automation, and experimen
 
     a) Create a folder for DVC on Google Drive
     b) Open the folder and grab the folder id from the url bar
-    c) `dvc remote add -d storage gdrive://1hVhI2a6XqiOBVFYbA8wCVbVfm5eduJZ9'
+    c) `dvc remote add -d storage gdrive://<folder_id>'
+
+5) Push the data to the configured remote
+    `dvc push`
+
+<br/>
 
 ### DVC usage
 
-- Add data to dvc tracking:
+<br/>
+
+- Add data to DVC tracking:
 
     `dvc add <file_or_folder_to_track>`
     
@@ -119,4 +155,29 @@ Data Version Control is a data versioning, ML workflow automation, and experimen
     Then:
     
     `git add data\raw.dvc data\.gitignore`
+    `git commit ...`
+    `git push`
+    `dvc push`
 
+- Pull data from DVC
+
+    `dvc pull`
+
+- Checkout a previous DVC version
+    
+    1) git checkout to the desired version the .dvc file corresponding to the data we want to checkout
+    2) `dvc checkout` 
+
+<br/>
+
+
+### Troubleshooting
+
+- If pulling from gdrive fails with the error "file has been identified as malware or spam and cannot be 
+downloaded dvc" run:
+
+    `dvc remote modify <myremote> gdrive_acknowledge_abuse true`
+
+<br/>
+
+## MLFlow

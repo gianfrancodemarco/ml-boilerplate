@@ -229,6 +229,10 @@ downloaded dvc" run:
 
 MLflow is an open source platform to manage the ML lifecycle, including experimentation, reproducibility, deployment, and a central model registry. MLflow currently offers four components:
 
+MLflow allows you to package code and its dependencies as a project that can be run in a reproducible fashion on other data. Each project includes its code and a MLproject file that defines its dependencies (for example, Python environment) as well as what commands can be run into the project and what arguments they take.
+
+
+
 ## MLFlow setup
 
 1. Installing MLflow
@@ -240,11 +244,12 @@ MLflow is an open source platform to manage the ML lifecycle, including experime
 2. Start the UI
 
 ## Using setup
-- Logging metrics, params and artifacts
+- Logging metrics, params, artifacts and models
 
     ```
     from mlflow import log_metric, log_param, log_artifacts
-    
+    import mlflow.sklearn
+    mlflow.sklearn.log_model
     ...
 
     # Log a parameter (key-value pair)

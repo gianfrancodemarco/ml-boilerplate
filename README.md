@@ -7,19 +7,22 @@ A Python ML boilerplate based on Cookiecutter Data Science, providing support fo
 
 ## Table of Contents
 1. [Initial Recommendations](#initial-recommendations)
-2. [Cookiecutter](#cookiecutter)
+2. [How to use this project](#how-to-use-this-project)
+3. [Cookiecutter](#cookiecutter)
     1. [Cookiecutter Data science Setup](#cookiecutter-data-science-setup)
     2. [Project Organization](#project-organization)
-3. [DVC](#dvc)
+4. [DVC](#dvc)
     1. [DVC setup (Windows)](#dcv-setup-windows)
     2. [DVC usage](#dvc-usage)
     3. [Troubleshooting](#troubleshooting)
-4. [MLFlow](#mlflow)
+5. [MLFlow](#mlflow)
 
 
 <br/>
 
 ## Initial Recommendations
+
+### Venv
 Before starting to work with this boilerplate, create and activate a python virtual environment using _venv_
 
 ```
@@ -28,6 +31,28 @@ python -m venv <venv_name>
 pip install -r requirements.txt
 ```
 
+### Conda
+[Conda](https://docs.conda.io/en/latest/miniconda.html) is recommended.
+If an error shows up during conda environment setup follow this [thread](https://stackoverflow.com/questions/50125472/issues-with-installing-python-libraries-on-windows-condahttperror-http-000-co).
+
+
+### SQLite
+This project uses SQLite to store mlflow runs data.
+[Install](https://www.sqlite.org/download.html) SQLite
+
+### MLFlow
+To run the MLFlow server, run mlflow_server.bat.
+This project uses a SQLite database for storing experiments data, and stores the model into the models/ folder. This should be added to dvc tracking. 
+
+<br/>
+
+## How to use this project
+This project comes with code and setup examples
+To use it:
+    1. Fork the project
+    2. Delete the folders src/examples, data/examples
+    3. Edit the files MLproject and conda.yaml based on your needs
+    4. Setup DVC
 
 <br/>
 
@@ -228,9 +253,16 @@ downloaded dvc" run:
 ## MLFlow
 
 MLflow is an open source platform to manage the ML lifecycle, including experimentation, reproducibility, deployment, and a central model registry. MLflow currently offers four components:
+- MLflow tracking
+- MLflow projects
+- MLflow models
+- Model registry
 
-MLflow allows you to package code and its dependencies as a project that can be run in a reproducible fashion on other data. Each project includes its code and a MLproject file that defines its dependencies (for example, Python environment) as well as what commands can be run into the project and what arguments they take.
+### MLflow projects
 
+An [MLflow Project](https://mlflow.org/docs/latest/projects.html) is a format for packaging data science code in a reusable and reproducible way, based primarily on conventions. In addition, the Projects component includes an API and command-line tools for running projects, making it possible to chain together projects into workflows.
+
+At the core, MLflow Projects are just a convention for organizing and describing your code to let other data scientists (or automated tools) run it. Each project is simply a directory of files, or a Git repository, containing your code. MLflow can run some projects based on a convention for placing files in this directory (for example, a conda.yaml file is treated as a Conda environment), but you can describe your project in more detail by adding a MLproject file, which is a YAML formatted text file.
 
 
 ## MLFlow setup
@@ -242,6 +274,22 @@ MLflow allows you to package code and its dependencies as a project that can be 
     ```
 
 2. Start the UI
+    ```
+    mlflow ui
+    ```
+
+3. Setup a remote tracking server (Optional)
+   
+   By default MLFlow will store tracking data locally in the _mlruns_ folder.
+   Runs and models can be stored on private or public remote servers.
+   This project uses SQLite as database for the mlflow backend.
+
+
+    ...
+4. Start a MLFlow project
+    ```
+    mlflow run <path_to_project>
+    ```
 
 ## Using setup
 - Logging metrics, params, artifacts and models

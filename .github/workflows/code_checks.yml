@@ -21,7 +21,7 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files 'src/*.py')
+        pylint --fail-under=6.0 $(git ls-files 'src/*.py') 
   pynblint:
     runs-on: ubuntu-latest
     strategy:

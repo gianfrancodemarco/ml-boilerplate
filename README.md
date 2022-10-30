@@ -1,8 +1,8 @@
 ml-boilerplate
 ==============================
 
-[![PyLint](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/code_checks.yml/badge.svg?branch=main)](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/code_checks.yml)
-[![PynbLint](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/code_checks.yml/badge.svg?branch=main)](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/code_checks.yml)
+[![PyLint](https://github.com/gianfrancodemarco/ml-boilerplate/actions/workflows/code_checks.yml/badge.svg?branch=main)](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/code_checks.yml)
+[![PynbLint](https://github.com/gianfrancodemarco/ml-boilerplate/actions/workflows/code_checks.yml/badge.svg?branch=main)](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/code_checks.yml)
 
 A Python ML boilerplate based on Cookiecutter Data Science, providing support for data versioning (DVC), experiment tracking, Model&Dataset cards, etc.
 

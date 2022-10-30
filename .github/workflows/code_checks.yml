@@ -1,6 +1,10 @@
 name: Code check
 
-on: [push, merge]
+on: 
+  push:
+  pull_request:
+  types:
+    - closed
 
 jobs:
   pylint:

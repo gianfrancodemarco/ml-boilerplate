@@ -28,7 +28,7 @@ Before starting to work with this boilerplate, create and activate a python virt
 ```
 python -m venv <venv_name>
 <venv_name>\Scripts\activate
-pip install -r requirements.txt
+pip install -r dev-requirements.txt
 ```
 
 ### Conda

@@ -39,4 +39,4 @@ jobs:
         pip install pynblint
     - name: Analysing the code with pynblint
       run: |
-        pynblint $(git ls-files 'notebooks') 
+        pynblint 'notebooks'

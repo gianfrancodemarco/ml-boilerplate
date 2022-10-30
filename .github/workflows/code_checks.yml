@@ -2,6 +2,7 @@ name: Code check
 
 on: 
   push:
+  - ".*"
   pull_request:
   types:
     - closed

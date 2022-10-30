@@ -1,7 +1,7 @@
 ml-boilerplate
 ==============================
 
-[![CODE_CHECKS](https://github.com/Francesco-Ranieri/ml-boilerplate.git/actions/workflows/code_checks.yml/badge.svg)](https://github.com/Francesco-Ranieri/ml-boilerplate.git/actions/workflows/code_checks.yml)
+[![Code Checks](https://github.com/Gianfranco-Demarco/ml-boilerplate.git/actions/workflows/code_checks.yml/badge.svg)](https://github.com/Francesco-Ranieri/ml-boilerplate.git/actions/workflows/code_checks.yml)
 
 
 A Python ML boilerplate based on Cookiecutter Data Science, providing support for data versioning (DVC), experiment tracking, Model&Dataset cards, etc.

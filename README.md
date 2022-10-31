@@ -1,8 +1,8 @@
 ml-boilerplate
 ==============================
 
-[![Code check](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/code_checks.yml/badge.svg?event=push)](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/code_checks.yml)
-[![Tests](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/tests.yml/badge.svg?event=push)](https://github.com/Francesco-Ranieri/ml-boilerplate/actions/workflows/tests.yml)
+[![Code check](https://github.com/gianfrancodemarco/ml-boilerplate/actions/workflows/code_checks.yml/badge.svg)](https://github.com/gianfrancodemarco/ml-boilerplate/actions/workflows/code_checks.yml)
+[![Tests](https://github.com/gianfrancodemarco/ml-boilerplate/actions/workflows/tests.yml/badge.svg)](https://github.com/gianfrancodemarco/ml-boilerplate/actions/workflows/tests.yml)
 
 A Python ML boilerplate based on Cookiecutter Data Science, providing support for data versioning (DVC), experiment tracking, Model&Dataset cards, etc.
 
@@ -89,7 +89,7 @@ This project was created with the following steps:
     git add README.md
     git commit -m "first commit"
     git branch -M main
-    git remote add origin https://github.com/Francesco-Ranieri/ml-boilerplate.git
+    git remote add origin https://github.com/gianfrancodemarco/ml-boilerplate.git
     git push -u origin main
     ```
 

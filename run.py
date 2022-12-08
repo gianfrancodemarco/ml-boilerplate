@@ -19,7 +19,6 @@ def build_command(args):
         command = [*command, "-e", args.e]
     url = "."
     command.append(url)
-    print(command)
     return command
 
 

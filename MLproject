@@ -3,8 +3,8 @@ name: tutorial
 conda_env: conda.yaml
 
 entry_points:
-  download_database:
-    command: "python src/data/download.py"
+  make_dataset:
+    command: "python src/data/make_dataset.py"
   main:
     parameters:
       alpha: {type: float, default: 0.6}

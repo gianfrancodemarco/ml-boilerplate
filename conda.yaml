@@ -9,4 +9,5 @@ dependencies:
       - mlflow>=1.0
       - pandas
       - numpy
+      - joblib
       - -e . # install this project as a package so relative import can be used

@@ -1,4 +1,5 @@
 import logging
+import shutil
 
 import requests
 from tqdm import tqdm
@@ -25,3 +26,10 @@ def fetch_or_resume(url, filename):
         for data in tqdm(iterable = response.iter_content(chunk_size = 1024), total = total_size//1024, unit = 'KB'):
             f.write(data)
         logging.info(f"Download complete.")
+
+
+def download_image(url, dest):
+    response = requests.get(url, stream=True)
+    with open(dest, 'wb') as out_file:
+        shutil.copyfileobj(response.raw, out_file)
+    del response

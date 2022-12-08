@@ -3,6 +3,8 @@ name: tutorial
 conda_env: conda.yaml
 
 entry_points:
+  download_database:
+    command: "python src/data/download.py"
   main:
     parameters:
       alpha: {type: float, default: 0.6}

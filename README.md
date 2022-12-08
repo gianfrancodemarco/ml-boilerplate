@@ -30,7 +30,13 @@ Before starting to work with this boilerplate, create and activate a python virt
 
 ```
 python -m venv <venv_name>
+
+ON WINDOWS:
 <venv_name>\Scripts\activate
+
+ON LINUX:
+source <venv_name>/bin/activate
+
 pip install -r dev-requirements.txt
 ```
 

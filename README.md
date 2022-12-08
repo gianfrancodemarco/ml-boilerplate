@@ -9,13 +9,16 @@ A Python ML boilerplate based on Cookiecutter Data Science, providing support fo
 <br/>
 
 ## Table of Contents
-1. [Initial Recommendations](#initial-recommendations)
+1. [Dependencies](#dependencies)
 2. [How to use this project](#how-to-use-this-project)
 3. [Cookiecutter](#cookiecutter)
     1. [Cookiecutter Data science Setup](#cookiecutter-data-science-setup)
     2. [Project Organization](#project-organization)
 4. [DVC](#dvc)
-    1. [DVC setup (Windows)](#dcv-setup-windows)
+    1. [Installation](#installation)
+    2. [Add a remote](#add-a-remote)
+        1. [Google Drive](#google-drive)
+        2. [Dagshub](#dagshub)
     2. [DVC usage](#dvc-usage)
     3. [Troubleshooting](#troubleshooting)
 5. [MLFlow](#mlflow)
@@ -23,9 +26,9 @@ A Python ML boilerplate based on Cookiecutter Data Science, providing support fo
 
 <br/>
 
-## Initial Recommendations
+## Dependencies
 
-### Venv
+### Venv (Strongly Recommended)
 Before starting to work with this boilerplate, create and activate a python virtual environment using _venv_
 
 ```
@@ -36,28 +39,37 @@ ON WINDOWS:
 
 ON LINUX:
 source <venv_name>/bin/activate
+```
 
+<br/>
+
+### Dev requirements (Required)
+Install the dev requirements, possibly in a virtual environment.
+
+```
 pip install -r dev-requirements.txt
 ```
 
-### Conda
-[Conda](https://docs.conda.io/en/latest/miniconda.html) is recommended.
-If an error shows up during conda environment setup follow this [thread](https://stackoverflow.com/questions/50125472/issues-with-installing-python-libraries-on-windows-condahttperror-http-000-co).
+<br/>
 
+### Conda (Optional)
 
-### SQLite
-This project uses SQLite to store mlflow runs data.
-[Install](https://www.sqlite.org/download.html) SQLite
+If you need to use a conda environment, [conda]((https://docs.conda.io/en/latest/miniconda.html)) is required to be installed as executable. recommended.
 
-### MLFlow
-To run the MLFlow server, run mlflow_server.bat.
-This project uses a SQLite database for storing experiments data, and stores the model into the models/ folder. This should be added to dvc tracking. 
+_If an error shows up during conda environment setup follow this [thread](https://stackoverflow.com/questions/50125472/issues-with-installing-python-libraries-on-windows-condahttperror-http-000-co)_
+
+<br/>
+
+### SQLite (Optional)
+
+If you want to use SQLite to store mlflow runs data, you need to [install]((https://www.sqlite.org/download.html)) it on your system
 
 <br/>
 
 ## How to use this project
-This project comes with code and setup examples
+This project comes with boilerplate code and examples.
 To use it:
+
     1. Fork the project
     2. Delete the folders src/examples, data/examples
     3. Edit the files MLproject and conda.yaml based on your needs
@@ -168,43 +180,40 @@ DVC will:
 
 <br/>
 
-### DCV setup (Windows)
+### Installation
 <br/>
 
-1) Install DVC
-
-    ```
     pip install dvc
-    ```
 
-2) Init DVC
 
-    ```
-    dvc init
-    ```
 
-3) Use `dvc get` to download a sample dataset (Optional) 
-    
-    ```
-    dvc get https://github.com/iterative/dataset-registry get-started/data.xml -o data/raw/data.xml
-    ```
+<br/>
 
-4) Add a DVC remote (Google Drive)
+### Add a remote 
+<br/>
 
-    a) Create a folder for DVC on Google Drive
-    
-    b) Open the folder and grab the folder id from the url bar
-    
-    c) 
-    ```
-    dvc remote add -d storage gdrive://<folder_id>
-    ```
+#### Google Drive
+<br/>
+1. Create a folder for DVC on Google Drive<br/>
+2. Open the folder and grab the folder id from the url bar<br/>
+3. Add the remote to the DVC configuration:<br/><br/>
 
-5) Push the data to the configured remote
-    ```
-    dvc push
-    ```
+```
+dvc remote add -d storage gdrive://<folder_id>
+```
 
+
+<br/>
+
+#### Dagshub
+<br/>
+
+```
+dvc remote add origin <your_origin>
+dvc remote modify origin --local auth basic 
+dvc remote modify origin --local user <your_username> 
+dvc remote modify origin --local password <your_token> 
+```
 <br/>
 
 ### DVC usage
@@ -226,7 +235,7 @@ DVC will:
     
     ```
     git add data\raw.dvc data\.gitignore
-    git commit ...
+    git commit -m <your_message>
     git push
     dvc push
     ```

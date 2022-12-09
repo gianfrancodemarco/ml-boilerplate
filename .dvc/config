@@ -2,3 +2,5 @@
     remote = origin
 ['remote "origin"']
     url = https://dagshub.com/gianfrancodemarco/ml-boilerplate.dvc
+['remote "storage"']
+    url = gdrive://1hVhI2a6XqiOBVFYbA8wCVbVfm5eduJZ9

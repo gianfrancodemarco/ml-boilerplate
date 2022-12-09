@@ -45,7 +45,7 @@ def download_cards_image():
     #     logging.info(f"Downloading image {idx}/{len(cards)}")
     #     download_card_image(card)
 
-    results = Parallel(n_jobs=100)(delayed(download_card_image)(idx, card) for (idx, card)  in enumerate(cards))
+    results = Parallel(n_jobs=-1, prefer="threads")(delayed(download_card_image)(idx, card) for (idx, card)  in enumerate(cards))
 
     logging.info("Download complete.")
 
@@ -63,8 +63,10 @@ def download_card_image(idx, card):
     if os.path.isfile(card_path):
         logging.info("The card image is already present. Skipping.")
     else:
-        download_image(image_url, card_path)
-        time.sleep(0.5)
+        try:
+            download_image(image_url, card_path)
+        except:
+            pass
 
 
 download_cards_db()

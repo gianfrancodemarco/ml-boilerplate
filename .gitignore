@@ -88,3 +88,4 @@ target/
 venv
 /models
 /data/raw
+/data

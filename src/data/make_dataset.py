@@ -12,6 +12,8 @@ from src.data.misc import download_image, fetch_or_resume
 logging.config.fileConfig(os.path.join(utils.SRC_PATH, "logging.conf"))
 
 CARDS_DATABASE_PATH = os.path.join(utils.DATA_PATH, "raw", "card_database.sqlite")
+IMAGES_DESTIN = os.path.join(utils.DATA_PATH, "raw", "card_images")
+
 IMAGES_DESTINATION = os.path.join(utils.DATA_PATH, "raw", "card_images")
 
 def get_cursor():
@@ -30,7 +32,7 @@ def download_cards_db():
     fetch_or_resume(DATA_URL, CARDS_DATABASE_PATH)
     logging.info("Download complete.")
     
-def download_cards_image():
+def download_cards_images():
 
     logging.info("Downloading images for all of the card in the database...")
 
@@ -70,4 +72,4 @@ def download_card_image(idx, card):
 
 
 download_cards_db()
-download_cards_image()
+download_cards_images()

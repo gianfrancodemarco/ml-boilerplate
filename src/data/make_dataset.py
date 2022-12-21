@@ -11,10 +11,12 @@ from src.data.misc import download_image, fetch_or_resume
 
 logging.config.fileConfig(os.path.join(utils.SRC_PATH, "logging.conf"))
 
-CARDS_DATABASE_PATH = os.path.join(utils.DATA_PATH, "raw", "card_database.sqlite")
+CARDS_DATABASE_PATH = os.path.join(
+    utils.DATA_PATH, "raw", "card_database.sqlite")
 IMAGES_DESTIN = os.path.join(utils.DATA_PATH, "raw", "card_images")
 
 IMAGES_DESTINATION = os.path.join(utils.DATA_PATH, "raw", "card_images")
+
 
 def get_cursor():
     def dict_factory(cursor, row):
@@ -26,30 +28,35 @@ def get_cursor():
     cur = con.cursor()
     return cur
 
+
 def download_cards_db():
     logging.info("Downloading cards database...")
-    DATA_URL = os.getenv("CARD_DATABASE_URL", "https://mtgjson.com/api/v5/AllPrintings.sqlite")
+    DATA_URL = os.getenv("CARD_DATABASE_URL",
+                         "https://mtgjson.com/api/v5/AllPrintings.sqlite")
     fetch_or_resume(DATA_URL, CARDS_DATABASE_PATH)
     logging.info("Download complete.")
-    
+
+
 def download_cards_images():
 
     logging.info("Downloading images for all of the card in the database...")
 
-    if not os.path.exists(IMAGES_DESTINATION): 
+    if not os.path.exists(IMAGES_DESTINATION):
         os.makedirs(IMAGES_DESTINATION)
 
     db = get_cursor()
     cards = db.execute("SELECT id, scryfallId FROM cards").fetchall()
 
-    # This was too slow  
+    # This was too slow
     # for idx, card in enumerate(cards):
     #     logging.info(f"Downloading image {idx}/{len(cards)}")
     #     download_card_image(card)
 
-    results = Parallel(n_jobs=-1, prefer="threads")(delayed(download_card_image)(idx, card) for (idx, card)  in enumerate(cards))
+    results = Parallel(n_jobs=-1, prefer="threads")(delayed(download_card_image)
+                                                    (idx, card) for (idx, card) in enumerate(cards))
 
     logging.info("Download complete.")
+
 
 def download_card_image(idx, card):
 
@@ -58,10 +65,10 @@ def download_card_image(idx, card):
     scryfallId = card['scryfallId']
     version = "normal"
     image_url = f"https://api.scryfall.com/cards/{scryfallId}?format=image&version={version}"
-    
+
     card_filename = f"{card['id']}_{version}.jpg"
     card_path = os.path.join(IMAGES_DESTINATION, card_filename)
-    
+
     if os.path.isfile(card_path):
         logging.info("The card image is already present. Skipping.")
     else:

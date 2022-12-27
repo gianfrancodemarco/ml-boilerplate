@@ -29,6 +29,30 @@ class CocoAnnotationsManager(AnnotationsManager):
         return annotation["bbox"]
         
     def get_bbox_polygon(self, image_path):
+        """
+        https://github.com/cocodataset/cocoapi/issues/34
+        """
+
         bbox = self.get_bbox(image_path)
-        points = list(zip(bbox, bbox[1:]))
+        x_min, y_min, width, height = bbox 
+        points = [
+            (x_min, y_min), (x_min + width, y_min), (x_min + width, y_min + height), (x_min, y_min + height)
+        ]
+        return Polygon(points)
+
+
+    def get_segmentation(self, image_path):
+        """
+        https://github.com/cocodataset/cocoapi/issues/102
+        Image path is relative to data/
+        """
+
+        annotation = self.get_annotation(image_path=image_path)
+        return annotation["segmentation"][0]
+        
+    def get_segmentation_polygon(self, image_path):
+        segmentation = self.get_segmentation(image_path)
+        points = []
+        for index in range(len(segmentation))[::2]:
+            points.append((segmentation[index], segmentation[index+1]))
         return Polygon(points)

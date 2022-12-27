@@ -1,8 +1,8 @@
 # external requirements
+shapely
 click
 Sphinx
-coverage
-awscli
+opencv-python
 
 # MLflow requirements
 # Install MLflow

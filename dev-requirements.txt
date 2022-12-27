@@ -1,8 +1,11 @@
+-e .
+-r requirements.txt
 pytest
 python-dotenv>=0.5.1
 flake8
 mlflow
 dvc
+coverage
 
 # For jupyter notebooks
 jupyter

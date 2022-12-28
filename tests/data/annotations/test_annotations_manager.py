@@ -11,3 +11,4 @@ class TestsAnnotationsManager():
         annotations_manager = AnnotationsManager(ANNOTATIONS_PATH)
         annotations = annotations_manager.get_annotations()
         assert annotations
+        

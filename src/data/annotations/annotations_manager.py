@@ -1,4 +1,7 @@
 import json
+from abc import abstractmethod
+
+from shapely.geometry import Polygon
 
 
 class AnnotationsManager:
@@ -13,3 +16,9 @@ class AnnotationsManager:
 
     def get_annotations(self):
         return self.annotations
+
+    @abstractmethod
+    def get_segmentation_polygon(self, image_id) -> Polygon:
+        """
+        Given the image id, this method should return the polygon representing the segmentation of the image annotation
+        """

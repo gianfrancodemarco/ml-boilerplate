@@ -334,7 +334,7 @@ At the core, MLflow Projects are just a convention for organizing and describing
 ## Jupyter
 
 Jupyter notebooks can be used for prototyping and experimenting.
-So start a Jupyter server, run 
+To start a Jupyter server, run 
 
 ```
 jupyter notebook --ip=0.0.0.0 --port=8888
@@ -343,3 +343,6 @@ jupyter notebook --ip=0.0.0.0 --port=8888
 _the ip option is needed as a workaround to a jupyter bug_
 
 The output will give a URL that can be used to access the instance, for example from an IDE.
+
+From VSCode, type ">Specify Jupyter Server for Connections" -> "Existing" -> Past the URL -> Give a name to the server
+Then again, type ">Specify Jupyter Server for Connections" -> Select the previously created server

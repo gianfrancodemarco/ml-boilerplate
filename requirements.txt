@@ -1,6 +1,3 @@
-# install in develop mode
--e .
-
 # external requirements
 shapely
 click

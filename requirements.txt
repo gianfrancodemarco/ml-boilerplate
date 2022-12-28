@@ -1,4 +1,5 @@
 # external requirements
+-e .
 shapely
 click
 Sphinx

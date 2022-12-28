@@ -2,7 +2,6 @@ import logging
 import logging.config
 import os
 import sqlite3
-import time
 
 from joblib import Parallel, delayed
 
@@ -44,23 +43,25 @@ def download_cards_images():
     if not os.path.exists(IMAGES_DESTINATION):
         os.makedirs(IMAGES_DESTINATION)
 
-    db = get_cursor()
-    cards = db.execute("SELECT id, scryfallId FROM cards").fetchall()
+    cursor = get_cursor()
+    cards = cursor.execute("SELECT id, scryfallId FROM cards").fetchall()
 
     # This was too slow
     # for idx, card in enumerate(cards):
     #     logging.info(f"Downloading image {idx}/{len(cards)}")
     #     download_card_image(card)
 
-    results = Parallel(n_jobs=-1, prefer="threads")(delayed(download_card_image)
-                                                    (idx, card) for (idx, card) in enumerate(cards))
+    Parallel(
+        n_jobs=-1,
+        prefer="threads"
+    )(delayed(download_card_image)(idx, card) for (idx, card) in enumerate(cards))
 
     logging.info("Download complete.")
 
 
 def download_card_image(idx, card):
 
-    logging.info(f"Downloading image {idx}")
+    logging.info("Downloading image %s", idx)
 
     scryfallId = card['scryfallId']
     version = "normal"
@@ -74,7 +75,7 @@ def download_card_image(idx, card):
     else:
         try:
             download_image(image_url, card_path)
-        except:
+        except Exception:
             pass
 
 

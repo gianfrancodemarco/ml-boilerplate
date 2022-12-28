@@ -1,15 +1,9 @@
+# install in develop mode
+-e .
+
 # external requirements
 shapely
 click
 Sphinx
 opencv-python
-
-# MLflow requirements
-# Install MLflow
 mlflow
-
-# Install MLflow with the experimental MLflow Pipelines component
-mlflow[pipelines] 
-
-# Install MLflow with extra ML libraries and 3rd-party tools
-#mlflow[extras]

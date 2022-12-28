@@ -4,7 +4,7 @@ conda_env: conda.yaml
 
 entry_points:
   make_dataset:
-    command: "python src/data/make_dataset.py"
+    command: "python src/pipeline/make_dataset.py"
   main:
     parameters:
       alpha: {type: float, default: 0.6}

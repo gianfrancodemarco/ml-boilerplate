@@ -6,8 +6,7 @@ from src import utils
 from src.data.annotations.coco_annotations_manager import \
     CocoAnnotationsManager
 
-ANNOTATIONS_PATH = os.path.join(utils.DATA_PATH, 'annotations', 'annotations.json')
-
+ANNOTATIONS_PATH = os.path.join(utils.TESTS_PATH, 'assets', 'annotations.json')
 class TestsCocoAnnotationManager():
 
     def test_get_annotation(self):

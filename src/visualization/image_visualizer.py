@@ -9,14 +9,17 @@ def show_image(
     bbox: Polygon = None,
     alpha: float = 0.2
 ):
+
+    image_copy = image.copy()
+
     if bbox:
 
         def int_coords(coords):
             return np.array(coords).round().astype(np.int32)
 
         exterior = [int_coords(bbox.exterior.coords)]
-        overlay = image.copy()
+        overlay = image_copy.copy()
         cv2.fillPoly(overlay, exterior, color=(255, 0, 0))
-        cv2.addWeighted(overlay, alpha, image, 1 - alpha, 0, image)
+        cv2.addWeighted(overlay, alpha, image_copy, 1 - alpha, 0, image_copy)
 
-    return plt.imshow(image)
+    return plt.imshow(image_copy)

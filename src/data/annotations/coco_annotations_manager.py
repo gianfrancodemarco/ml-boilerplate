@@ -28,22 +28,27 @@ class CocoAnnotationsManager(AnnotationsManager):
         annotations = self.get_annotations(image_id)
         return list(map(lambda annotation: annotation["bbox"], annotations))
 
-    def get_bbox_polygon(self, image_id):
+    def get_bboxes_polygons(self, image_id):
         """
         https://github.com/cocodataset/cocoapi/issues/34
         """
 
-        bbox = self.get_bbox(image_id)
-        x_min, y_min, width, height = bbox
-        
-        # TODO: Maybe can be replaced by doing Polygon(segmentation).bounds
-        points = [
-            (x_min, y_min),
-            (x_min + width, y_min),
-            (x_min + width, y_min + height),
-            (x_min, y_min + height)
-        ]
-        return Polygon(points)
+        bboxes = self.get_bboxes(image_id)
+        polygons = []
+
+        for bbox in bboxes:
+            x_min, y_min, width, height = bbox
+            
+            # TODO: Maybe can be replaced by doing Polygon(segmentation).bounds
+            points = [
+                (x_min, y_min),
+                (x_min + width, y_min),
+                (x_min + width, y_min + height),
+                (x_min, y_min + height)
+            ]
+            polygons.append(Polygon(points))
+            
+        return polygons
 
     def get_segmentations(self, image_id) -> List:
         """

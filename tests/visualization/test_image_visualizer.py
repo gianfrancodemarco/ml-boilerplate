@@ -22,5 +22,5 @@ class TestsImageVisualizer():
         assert show_image(IMAGE)
         annotations_manager = CocoAnnotationsManager(ANNOTATIONS_PATH)
         image_id = annotations_manager.get_image_id(image_path=IMAGE_PATH_RELATIVE_TO_DATA)
-        bbox = annotations_manager.get_bbox_polygon(image_id=image_id)
-        assert show_image(IMAGE, bbox)
+        polygons = annotations_manager.get_bboxes_polygons(image_id=image_id)
+        assert show_image(IMAGE, polygons[0])

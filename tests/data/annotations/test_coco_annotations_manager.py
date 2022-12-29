@@ -1,7 +1,6 @@
 import os
 
 from shapely.geometry import Polygon
-
 from src import utils
 from src.data.annotations.coco_annotations_manager import \
     CocoAnnotationsManager
@@ -9,23 +8,26 @@ from src.data.annotations.coco_annotations_manager import \
 ANNOTATIONS_PATH = os.path.join(utils.TESTS_PATH, 'assets', 'annotations.json')
 class TestsCocoAnnotationManager():
 
-    def test_get_annotation(self):
+    def test_get_annotations(self):
         annotations_manager = CocoAnnotationsManager(ANNOTATIONS_PATH)
         image_id = annotations_manager.get_image_id('1.jpeg')
-        annotation = annotations_manager.get_annotation(image_id=image_id)
+        annotations = annotations_manager.get_annotations(image_id=image_id)
         
-        for field in ["id", "bbox", "area"]:
-            assert field in annotation
+        for annotation in annotations:
+            for field in ["id", "bbox", "area"]:
+                assert field in annotation
             
-    def test_get_bbox(self):
+    def test_get_bboxes(self):
         annotations_manager = CocoAnnotationsManager(ANNOTATIONS_PATH)
         image_id = annotations_manager.get_image_id('1.jpeg')
-        bbox = annotations_manager.get_bbox(image_id=image_id)
-        assert isinstance(bbox, list)
+        bboxes = annotations_manager.get_bboxes(image_id=image_id)
+        assert isinstance(bboxes, list)
+        assert isinstance(bboxes[0], list)
 
-    def test_get_bbox_polygon(self):
+    def test_get_bboxes_polygon(self):
         annotations_manager = CocoAnnotationsManager(ANNOTATIONS_PATH)
         image_id = annotations_manager.get_image_id('1.jpeg')
-        polygon = annotations_manager.get_bbox_polygon(image_id=image_id)
-        assert isinstance(polygon, Polygon)
+        polygons = annotations_manager.get_bboxes_polygons(image_id=image_id)
+        assert isinstance(polygons, list)
+        assert isinstance(polygons[0], Polygon)
             

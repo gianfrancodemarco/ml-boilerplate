@@ -61,6 +61,6 @@ def sort_2d_points(
             return angles[i]
     
     angles = [math.atan2(y - centre_y, x - centre_x) for x,y in points]
-    counterclockwise_indices = sorted(range(len(points)), key=key_fun)
-    counterclockwise_points = [points[i] for i in counterclockwise_indices]
-    return counterclockwise_points
+    indices = sorted(range(len(points)), key=key_fun)
+    sorted_points = [points[i] for i in indices]
+    return sorted_points

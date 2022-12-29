@@ -10,24 +10,23 @@ class CocoAnnotationsManager(AnnotationsManager):
     def get_image_id(self, image_path):
         return list(filter(lambda image: image['file_name'].endswith(image_path), self.annotations['images']))[0]['id']
 
-    def __get_image_annotation__(self, image_id):
-        return list(filter(lambda annotation: annotation['image_id'] == image_id, self.annotations['annotations']))[0]
+    def __get_image_annotations__(self, image_id):
+        return list(filter(lambda annotation: annotation['image_id'] == image_id, self.annotations['annotations']))
 
-    def get_annotation(self, image_id):
+    def get_annotations(self, image_id):
         """
         Image path is relative to data/
         """
 
-        annotation = self.__get_image_annotation__(image_id)
-        return annotation
-
-    def get_bbox(self, image_id):
+        return self.__get_image_annotations__(image_id)
+        
+    def get_bboxes(self, image_id):
         """
         Image path is relative to data/
         """
 
-        annotation = self.get_annotation(image_id)
-        return annotation["bbox"]
+        annotations = self.get_annotations(image_id)
+        return list(map(lambda annotation: annotation["bbox"], annotations))
 
     def get_bbox_polygon(self, image_id):
         """
@@ -46,20 +45,25 @@ class CocoAnnotationsManager(AnnotationsManager):
         ]
         return Polygon(points)
 
-    def get_segmentation(self, image_id) -> List:
+    def get_segmentations(self, image_id) -> List:
         """
         https://github.com/cocodataset/cocoapi/issues/102
         """
 
-        annotation = self.get_annotation(image_id)
-        return annotation["segmentation"][0]
+        annotations = self.get_annotations(image_id)
+        return list(map(lambda annotation: annotation["segmentation"][0], annotations))
 
-    def get_segmentation_polygon(self, image_id) -> Polygon:
+    def get_segmentation_polygons(self, image_id) -> List[Polygon]:
         """
-        Given the image id, this method returns the polygon representing the segmentation of the image annotation
+        Given the image id, this method returns the polygon representing the segmentations of the image annotation
         """
-        segmentation = self.get_segmentation(image_id)
-        points = []
-        for index in range(len(segmentation))[::2]:
-            points.append((segmentation[index], segmentation[index+1]))
-        return Polygon(points)
+        segmentations = self.get_segmentations(image_id)
+        polygons = []
+        
+        for segmentation in segmentations:
+            points = []
+            for index in range(len(segmentation))[::2]:
+                points.append((segmentation[index], segmentation[index+1]))
+            polygons.append(Polygon(points))
+        
+        return polygons

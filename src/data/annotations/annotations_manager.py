@@ -18,7 +18,7 @@ class AnnotationsManager:
         return self.annotations
 
     @abstractmethod
-    def get_segmentation_polygon(self, image_id) -> Polygon:
+    def get_segmentation_polygons(self, image_id) -> Polygon:
         """
-        Given the image id, this method should return the polygon representing the segmentation of the image annotation
+        Given the image id, this method should return the polygons representing the segmentations of the image annotation
         """

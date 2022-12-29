@@ -3,5 +3,10 @@
         "image_path": "data/raw/templates/1.jpeg",
         "image_id": 0,
         "type": "FIXED"
+    },
+    {
+        "image_path": "data/raw/templates/2.jpeg",
+        "image_id": 1,
+        "type": "FIXED"
     }
 ]

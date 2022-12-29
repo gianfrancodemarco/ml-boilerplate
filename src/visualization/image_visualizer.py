@@ -22,4 +22,5 @@ def show_image(
         cv2.fillPoly(overlay, exterior, color=(255, 0, 0))
         cv2.addWeighted(overlay, alpha, image_copy, 1 - alpha, 0, image_copy)
 
+    plt.figure()
     return plt.imshow(image_copy)

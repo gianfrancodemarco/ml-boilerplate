@@ -1,3 +1,3 @@
-from .annotations import *
-from .augmentation import *
-from .misc import *
+from . import annotations
+from . import augmentation
+from . import misc

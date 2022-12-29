@@ -1,2 +1,2 @@
-from .data import *
-from .visualization import *
+from . import data
+from . import visualization

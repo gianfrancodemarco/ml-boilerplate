@@ -36,6 +36,8 @@ class CocoAnnotationsManager(AnnotationsManager):
 
         bbox = self.get_bbox(image_id)
         x_min, y_min, width, height = bbox
+        
+        # TODO: Maybe can be replaced by doing Polygon(segmentation).bounds
         points = [
             (x_min, y_min),
             (x_min + width, y_min),

@@ -1,14 +1,16 @@
 import json
 import os
 from abc import abstractmethod
-from typing import Any, List, Tuple
+from typing import List, Tuple
 
 import cv2
 import numpy
+import numpy as np
 from shapely.geometry import Polygon
 
 from src import utils
 from src.data.annotations.annotations_manager import AnnotationsManager
+from src.data.misc import sort_2d_points
 
 
 class ImageTemplate:
@@ -50,6 +52,12 @@ class ImageTemplate:
         Returns a pair: (the new image, the new image segmentation polygon)
         """
 
+    def __reorder_segmentation_points__(self, points: List):
+        """
+        Returns points ordered in clockwise fashion
+        """
+        return sort_2d_points(points)
+
 
 class FixedImageTemplate(ImageTemplate):
     def __init__(self, config: dict, annotations_manager: AnnotationsManager) -> None:
@@ -64,8 +72,29 @@ class FixedImageTemplate(ImageTemplate):
 
         Returns a pair: (the new image, the template segmentation polygon)
         """
-        generated = self.image[:]
-        
+        src_points = [
+            [0, 0],
+            [0, patch.shape[0]-1],
+            [patch.shape[1]-1, 0],
+            [patch.shape[1]-1, patch.shape[0]-1]
+        ]
+        src_points = np.float32(self.__reorder_segmentation_points__(src_points))
+
+        # Remove the last point, which is == to the first to close the polygon
+        dst_points = list(self.segmentation.exterior.coords)[:-1]
+        dst_points = np.float32(self.__reorder_segmentation_points__(dst_points))
+
+
+        transformation_matrix = cv2.getPerspectiveTransform(
+            src_points, dst_points
+        )
+        trans_img = cv2.warpPerspective(
+            patch,
+            transformation_matrix, 
+            (self.image.shape[0], self.image.shape[1])
+        )
+
+        return (trans_img, self.segmentation)
 
 
 class DynamicImageTemplate(ImageTemplate):

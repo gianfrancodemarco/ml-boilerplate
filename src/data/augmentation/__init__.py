@@ -1,1 +1,1 @@
-from .template_manager import *
+from . import template_manager

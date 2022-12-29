@@ -8,5 +8,40 @@
         "image_path": "data/raw/templates/2.jpeg",
         "image_id": 1,
         "type": "FIXED"
+    },
+    {
+        "image_path": "data/raw/templates/3.jpeg",
+        "image_id": 2,
+        "type": "FIXED"
+    },
+    {
+        "image_path": "data/raw/templates/4.jpeg",
+        "image_id": 3,
+        "type": "FIXED"
+    },
+    {
+        "image_path": "data/raw/templates/5.jpeg",
+        "image_id": 4,
+        "type": "FIXED"
+    },
+    {
+        "image_path": "data/raw/templates/6.jpeg",
+        "image_id": 5,
+        "type": "FIXED"
+    },
+    {
+        "image_path": "data/raw/templates/7.jpeg",
+        "image_id": 6,
+        "type": "FIXED"
+    },
+    {
+        "image_path": "data/raw/templates/8.jpeg",
+        "image_id": 7,
+        "type": "FIXED"
+    },
+    {
+        "image_path": "data/raw/templates/9.jpeg",
+        "image_id": 8,
+        "type": "FIXED"
     }
 ]

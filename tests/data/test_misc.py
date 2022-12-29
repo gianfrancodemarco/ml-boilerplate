@@ -42,4 +42,4 @@ class TestsMisc:
             (218.0, 1460.0)
         ]
 
-        assert sort_2d_points(pts, False) == counterclockwise_points
+        assert sort_2d_points(pts, clockwise = False) == counterclockwise_points

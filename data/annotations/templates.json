@@ -43,5 +43,19 @@
         "image_path": "data/raw/templates/9.jpeg",
         "image_id": 8,
         "type": "FIXED"
+    },
+    {
+        "image_path": "data/raw/templates/10.jpeg",
+        "image_id": 9,
+        "type": "DYNAMIC",
+        "background_path": "data/raw/templates/10_background.jpeg",
+        "max_patches":  3
+    },
+    {
+        "image_path": "data/raw/templates/11.jpeg",
+        "image_id": 10,
+        "type": "DYNAMIC",
+        "background_path": "data/raw/templates/11_background.jpeg",
+        "max_patches": 1
     }
 ]

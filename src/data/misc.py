@@ -77,12 +77,11 @@ def get_random_translated_polygon_in_boundary_and_not_overlapping(
     destination_width: int,
     destination_height: int,
     existing_polygons: List[Polygon],
-    max_tries = 100
+    max_tries=100
 ) -> Tuple[Polygon, bool]:
-
     """
     Translates randomly a polygon in a space, so that:
-        - the polygon stays inside max_x and max_y 
+        - the polygon stays inside max_x and max_y
         - the polygon doesn't overlap with any of overlappingsstaying into the max_x and max_y boundary.
 
     The overlapping is checked by brute forcing the polygon translation until a not overlapping is found
@@ -95,7 +94,7 @@ def get_random_translated_polygon_in_boundary_and_not_overlapping(
     translated_polygon = copy.copy(polygon)
 
     min_x, min_y, max_x, max_y = polygon.bounds
-    
+
     from_border_x_to_polygon = int(min_x)
     from_polygon_to_border_x = int(destination_width - max_x)
     from_border_y_to_polygon = int(min_y)
@@ -106,19 +105,20 @@ def get_random_translated_polygon_in_boundary_and_not_overlapping(
 
     collision = True
     current_try = 0
-    
+
     while collision and current_try < max_tries:
-        
+
         collision = False
-        
+
         translate_x = random.randint(-from_border_x_to_polygon, from_polygon_to_border_x)
         translate_y = random.randint(-from_border_y_to_polygon, from_polygon_to_border_y)
         translated_polygon = translate(polygon, translate_x, translate_y)
 
         for existing_polygon in existing_polygons:
             if translated_polygon.intersects(existing_polygon):
-                logging.warning(f"Failed try number {current_try} to generate a non-overlapping translation. Max tries: {max_tries}")
+                logging.warning(
+                    f"Failed try number {current_try} to generate a non-overlapping translation. Max tries: {max_tries}")
                 collision = True
                 current_try = current_try + 1
-    
+
     return (translated_polygon, not collision)

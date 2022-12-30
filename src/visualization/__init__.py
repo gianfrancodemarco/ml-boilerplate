@@ -1,1 +1,1 @@
-from .image_visualizer import show_image
+from . import image_visualizer

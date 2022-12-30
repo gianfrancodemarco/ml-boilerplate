@@ -57,8 +57,8 @@ class ImageTemplate:
         """
 
     def __transform_patch_into_polygon__(
-        self, 
-        patch: np.ndarray, 
+        self,
+        patch: np.ndarray,
         polygon: Polygon,
         destination_image: np.ndarray
     ) -> np.ndarray:
@@ -67,7 +67,6 @@ class ImageTemplate:
         The destination image is required so that the transformed patch is placed in an image of correct dimensions
         """
 
-        
         # Adjust the patch to match the segmentation polygon
         src_points = [
             [0, 0],
@@ -86,7 +85,7 @@ class ImageTemplate:
         )
         trans_img = cv2.warpPerspective(
             patch,
-            transformation_matrix, 
+            transformation_matrix,
             (destination_image.shape[0], destination_image.shape[1])
         )
 
@@ -99,15 +98,15 @@ class ImageTemplate:
         return sort_2d_points(points)
 
     def __stich_path_to_image__(
-        self, 
-        patch: np.ndarray, 
+        self,
+        patch: np.ndarray,
         dst_image: np.ndarray,
         polygon: np.ndarray
     ) -> np.ndarray:
-    
+
         dst_image = dst_image.copy()
         coords = [np.array(polygon.exterior.coords).round().astype(np.int32)]
-        cv2.fillPoly(dst_image, coords, color=(0,0,0))
+        cv2.fillPoly(dst_image, coords, color=(0, 0, 0))
         dst_image = cv2.add(dst_image, patch)
 
         return dst_image
@@ -128,10 +127,11 @@ class FixedImageTemplate(ImageTemplate):
         """
 
         if len(patches) != len(self.segmentation_polygons):
-            raise ValueError(f"{len(self.segmentation_polygons)} patches are needed, but {len(patches)} patches were provided")
+            raise ValueError(
+                f"{len(self.segmentation_polygons)} patches are needed, but {len(patches)} patches were provided")
 
         patched_image = self.image.copy()
-        
+
         for (patch, polygon) in zip(patches, self.segmentation_polygons):
             trans_patch = self.__transform_patch_into_polygon__(patch, polygon, patched_image)
             patched_image = self.__stich_path_to_image__(trans_patch, patched_image, polygon)
@@ -160,7 +160,6 @@ class DynamicImageTemplate(ImageTemplate):
         if len(self.segmentation_polygons) != 1:
             raise ValueError("Exactly 1 segementation_polygon is required for a DYNAMIC template")
 
-    
     def generate_image(self, patches: List[np.ndarray]) -> Tuple[np.ndarray, List[Polygon]]:
         """
         Generate an image from this template.
@@ -171,24 +170,30 @@ class DynamicImageTemplate(ImageTemplate):
         """
 
         if len(patches) > self.max_patches:
-            raise ValueError(f"A maximum of {len(self.max_patches)} is supported, but {len(patches)} patches were provided")
+            raise ValueError(
+                f"A maximum of {len(self.max_patches)} is supported, but {len(patches)} patches were provided")
 
         patched_image = self.background_image.copy()
         generated_polygons = []
         polygon = self.segmentation_polygons[0]
-        
+
         for patch in patches:
-            translated_polygon, succeeded = get_random_translated_polygon_in_boundary_and_not_overlapping(polygon, patched_image.shape[1], patched_image.shape[0], generated_polygons)
-            
+            translated_polygon, succeeded = get_random_translated_polygon_in_boundary_and_not_overlapping(
+                polygon, patched_image.shape[1], patched_image.shape[0], generated_polygons)
+
             if not succeeded:
-                logging.warning("It was not possible to generate a non-overlapping translation. Skipping this patch")
+                logging.warning(
+                    "It was not possible to generate a non-overlapping translation. Skipping this patch")
                 continue
 
             generated_polygons.append(translated_polygon)
-            trans_patch = self.__transform_patch_into_polygon__(patch, translated_polygon, patched_image)
-            patched_image = self.__stich_path_to_image__(trans_patch, patched_image, translated_polygon)
+            trans_patch = self.__transform_patch_into_polygon__(
+                patch, translated_polygon, patched_image)
+            patched_image = self.__stich_path_to_image__(
+                trans_patch, patched_image, translated_polygon)
 
         return (patched_image, generated_polygons)
+
 
 class ImagesTemplatesManager:
     templates_config_path: str
@@ -224,7 +229,6 @@ class ImagesTemplatesManager:
         image_id: int
     ) -> ImageTemplate:
         return list(filter(lambda template: template.image_id == image_id, self.templates))[0]
-
 
     def get_templates(self) -> List[ImageTemplate]:
         return self.templates

@@ -14,8 +14,8 @@ def show_image(
     image_copy = image.copy()
 
     if isinstance(segmentations, Polygon):
-        segmentations = [] 
-    
+        segmentations = []
+
     for segmentation in segmentations:
 
         def int_coords(coords):

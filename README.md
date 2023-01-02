@@ -6,9 +6,9 @@ To run the main entry point, run:
 python ./run.py 
 ```
 
-To run a specific entry_point (e.g. make_dataset), run:
+To run a specific entry_point (e.g. download_data), run:
 ```
-python ./run.py -e make_dataset 
+python ./run.py -e download_data 
 ```
 
 

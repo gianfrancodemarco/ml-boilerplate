@@ -147,7 +147,7 @@ This project was created with the following steps:
     	├── logging.conf   <- Logging configuration
     │   │
     │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
+    │   │   └── download_data.py
     │   │
     │   ├── features       <- Scripts to turn raw data into features for modeling
     │   │   └── build_features.py
@@ -159,6 +159,8 @@ This project was created with the following steps:
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
     │       └── visualize.py
+    |   |   
+    |   └── pipeline       <- Entry point scripts meant for reproducibility
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 

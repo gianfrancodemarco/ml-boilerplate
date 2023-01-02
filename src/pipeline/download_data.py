@@ -79,5 +79,10 @@ def download_card_image(idx, card):
             pass
 
 
-download_cards_db()
-download_cards_images()
+def download_templates():
+    pass
+
+if __name__ == "__main__":
+    download_cards_db()
+    download_cards_images()
+    download_templates()

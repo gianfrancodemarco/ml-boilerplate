@@ -8,6 +8,7 @@ from src import utils
 from src.data.annotations.coco_annotations_manager import \
     CocoAnnotationsManager
 from src.data.augmentation.template_manager import ImagesTemplatesManager
+from src.features.build_features import flatten_list
 
 CARD_IMAGES_PATH = os.path.join(utils.DATA_PATH, 'raw', 'templates')
 
@@ -41,7 +42,7 @@ def make_dataset():
     templates = image_templates_manager.get_templates()
 
     
-    for (dataset_split, percentage) in [("train", 0.7), ("test", 0.2), ("validation", 0.1)]:
+    for (dataset_split, percentage) in [("train", .7), ("test", .2), ("validation", .1)]:
         
         current = 0
 
@@ -93,7 +94,7 @@ def make_dataset():
                 generated_annotations_manager.add_annotation(
                     image_id=image_id,
                     category_id=0,
-                    segmentation=[list(polygon.exterior.coords) for polygon in polygons],
+                    segmentation=[flatten_list([list(el) for el in polygon.exterior.coords]) for polygon in polygons],
                     bbox=[list(polygon.bounds) for polygon in polygons],
                     area=[polygon.area for polygon in polygons]
                 )

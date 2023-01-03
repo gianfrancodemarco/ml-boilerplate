@@ -48,7 +48,7 @@ class ImageTemplate:
         )
         self.ignore = config.get('ignore', False)
         self.annotation_manager = annotations_manager
-        self.segmentation_polygons = self.annotation_manager.get_segmentation_polygons(
+        self.segmentation_polygons = self.annotation_manager.get_segmentation_image_polygons(
             self.image_id)
 
     @abstractmethod

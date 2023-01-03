@@ -4,50 +4,55 @@ from typing import Tuple
 
 import cv2
 import numpy as np
-import tensorflow.keras as keras
+import tensorflow as tf
 from keras.callbacks import Callback
-from keras.layers import (AveragePooling2D, BatchNormalization, Conv2D, Dense,
-                          Dropout, Flatten, Input, LeakyReLU, MaxPooling2D)
-from keras.metrics import MeanSquaredError, RootMeanSquaredError
-from keras.models import Sequential, load_model
 from src import utils
 from src.data.annotations.coco_annotations_manager import \
     CocoAnnotationsManager
+from src.features.dataset import ImagesDatasetGenerator
+from src.models.build_model import build_model
 
+train_annotations_path = os.path.join(utils.DATA_PATH, 'annotations', 'train_set_annotations.json')
+train_annotations_manager = CocoAnnotationsManager()
+train_annotations_manager.load_annotations(train_annotations_path)
+train_images_base_path = os.path.join(utils.DATA_PATH, 'processed', 'train')
+train_images_paths =  [os.path.join(train_images_base_path, image['file_name']) for image in train_annotations_manager.get_images()]
+train_dataset_generator = ImagesDatasetGenerator(
+    images_paths=train_images_paths[:100],
+    annotations=train_annotations_manager.get_flattened_segmentations(),
+    pad_annotations=50
+)
 
-def pad_or_truncate(some_list, target_len):
-    return some_list[:target_len] + [0]*(target_len - len(some_list))
+train_dataset = tf.data.Dataset.from_generator(
+    train_dataset_generator.get_image,
+    output_signature=(tf.TensorSpec(shape=(512, 512, 3)), tf.TensorSpec(shape=(50, )))
+)
 
-def flatten_list(some_list):
-    return list(itertools.chain.from_iterable(some_list))
+validation_annotations_path = os.path.join(utils.DATA_PATH, 'annotations', 'validation_set_annotations.json')
+validation_annotations_manager = CocoAnnotationsManager()
+validation_annotations_manager.load_annotations(validation_annotations_path)
+validation_images_base_path = os.path.join(utils.DATA_PATH, 'processed', 'validation')
+validation_images_paths =  [os.path.join(validation_images_base_path, image['file_name']) for image in validation_annotations_manager.get_images()]
+validation_dataset_generator = ImagesDatasetGenerator(
+    images_paths=validation_images_paths[:100],
+    annotations=validation_annotations_manager.get_flattened_segmentations(),
+    pad_annotations=50
+)
 
+validation_dataset = tf.data.Dataset.from_generator(
+    validation_dataset_generator.get_image,
+    output_signature=(tf.TensorSpec(shape=(512, 512, 3)), tf.TensorSpec(shape=(50, )))
+)
 
-def load_data():
-    TRAIN_ANNOTATIONS_PATH = os.path.join(utils.DATA_PATH, 'annotations', 'train_set_annotations.json')
-    annotations_manager = CocoAnnotationsManager()
-    annotations_manager.load_annotations(TRAIN_ANNOTATIONS_PATH)
-    train_X = [cv2.resize(cv2.imread(os.path.join(utils.DATA_PATH, 'processed', 'train', image['file_name'])), (512,512)) for image in annotations_manager.get_images()[:2]]
-    train_y = [
-        pad_or_truncate(flatten_list(segmentation), 50) for segmentation in
-            [[flatten_list(segmentation) for segmentation in 
-                annotation['segmentation']] for annotation in 
-                    annotations_manager.get_annotations()[:2]
-            ]
-        ]
-    VALIDATION_ANNOTATIONS_PATH = os.path.join(utils.DATA_PATH, 'annotations', 'validation_set_annotations.json')
-    annotations_manager = CocoAnnotationsManager()
-    annotations_manager.load_annotations(VALIDATION_ANNOTATIONS_PATH)
-    validation_X = [cv2.resize(cv2.imread(os.path.join(utils.DATA_PATH, 'processed', 'train', image['file_name'])), (512,512)) for image in annotations_manager.get_images()[:2]]
-    validation_y = [
-        pad_or_truncate(flatten_list(segmentation), 50) for segmentation in
-            [[flatten_list(segmentation) for segmentation in 
-                annotation['segmentation']] for annotation in 
-                    annotations_manager.get_annotations()[:2]
-            ]
-        ]
+def configure_for_performance(ds):
+  ds = ds.cache()
+  ds = ds.shuffle(buffer_size=1000)
+  ds = ds.batch(16)
+  ds = ds.prefetch(buffer_size=tf.data.AUTOTUNE)
+  return ds
 
-    return train_X, train_y, validation_X, validation_y
-
+train_dataset = configure_for_performance(train_dataset)
+validation_dataset = configure_for_performance(validation_dataset)
 
 class EarlyStoppingByLossVal(Callback):
     def __init__(self, monitor='val_loss', value=0.0001, verbose=0):
@@ -66,73 +71,12 @@ class EarlyStoppingByLossVal(Callback):
                 print("\nEpoch %05d: early stopping THR" % epoch)
             self.model.stop_training = True
 
-
-def build_model(dropout: float = 0):
-    input_shape = (512, 512, 3)
-    model = Sequential()
-
-    model.add(Input(shape=input_shape))
-
-    # Only for 3 channel images
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-
-    model.add(Flatten())
-
-    if dropout:
-        model.add(Dropout(dropout))
-
-    # Only for 3 channel images
-    model.add(Dense(128))
-    model.add(LeakyReLU(alpha=0.01))
-
-    model.add(Dense(50))
-    model.add(LeakyReLU(alpha=0.01))
-
-    model.build()
-    model.summary()
-
-    model.compile(loss='mse', optimizer='adam', metrics=[RootMeanSquaredError()])
-
-    return model
-
-
 def train_model(
         model,
-        X,
-        y,
+        dataset,
+        validation_dataset,
         epochs=1000,
         validation_split: float = 0,
-        validation_data: Tuple = (),
         early_stopping: bool = False,
         save_every_n_epochs: int = 100,
         save_path = ".",
@@ -152,14 +96,13 @@ def train_model(
         print(f"Training the model for {save_every_n_epochs} epochs")
 
         model.fit(
-            np.array(X),
-            np.array(y),
+            x = dataset,
+            validation_data = validation_dataset,
             epochs=save_every_n_epochs,
             batch_size=16,
             verbose=1,
             validation_split=validation_split,
             callbacks=callbacks,
-            validation_data=(np.array(validation_data[0]), np.array(validation_data[1]))
         )
         print("Model trained")
 
@@ -170,7 +113,5 @@ def train_model(
 
     return model
 
-
-train_X, train_y, validation_X, validation_y = load_data()
 model = build_model()
-train_model(model, train_X, train_y, validation_data=(validation_X, validation_y), model_name="first_model")
+train_model(model, dataset = train_dataset, validation_dataset=validation_dataset, model_name="first_model")

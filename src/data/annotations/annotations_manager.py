@@ -29,7 +29,7 @@ class AnnotationsManager:
         pass
 
     @abstractmethod
-    def get_segmentation_polygons(self, image_id) -> Polygon:
+    def get_segmentation_image_polygons(self, image_id) -> Polygon:
         """
         Given the image id, this method should return the polygons representing the segmentations of the image annotation
         """

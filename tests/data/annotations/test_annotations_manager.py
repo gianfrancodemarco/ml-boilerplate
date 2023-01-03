@@ -9,6 +9,6 @@ class TestsAnnotationsManager():
 
     def test_annotations_manager(self):
         annotations_manager = AnnotationsManager(ANNOTATIONS_PATH)
-        annotations = annotations_manager.get_annotations()
+        annotations = annotations_manager.get_image_annotations()
         assert annotations
         

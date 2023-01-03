@@ -22,6 +22,7 @@ class ImageTemplate:
         image_path              The image path relative to the data folder
         image_id                Image id to as associated in the annotations
         type                    FIXED or DYNAMIC
+        ignore                  If true, the template will won't be returned by getters methods
         segmentation            Polygon of the image annotation
         annotation_manager      Used to retrieve the image annotation
     """
@@ -29,8 +30,10 @@ class ImageTemplate:
     image_path: str
     image_id: str
     type: str
+    ignore: bool
     segmentation_polygons: List[Polygon]
     annotation_manager: AnnotationsManager
+    
 
     def __init__(
         self,
@@ -43,6 +46,7 @@ class ImageTemplate:
             cv2.imread(os.path.join(utils.ROOT_PATH, self.image_path)),
             cv2.COLOR_BGR2RGB
         )
+        self.ignore = config.get('ignore', False)
         self.annotation_manager = annotations_manager
         self.segmentation_polygons = self.annotation_manager.get_segmentation_polygons(
             self.image_id)
@@ -86,7 +90,7 @@ class ImageTemplate:
         trans_img = cv2.warpPerspective(
             patch,
             transformation_matrix,
-            (destination_image.shape[0], destination_image.shape[1])
+            (destination_image.shape[1], destination_image.shape[0])
         )
 
         return trans_img
@@ -199,7 +203,7 @@ class ImagesTemplatesManager:
     templates_config_path: str
     templates_config: dict
     annotation_manager: AnnotationsManager
-    templates: List
+    templates: List[ImageTemplate]
 
     def __init__(
         self,
@@ -221,8 +225,13 @@ class ImagesTemplatesManager:
             elif template_config["type"] == "DYNAMIC":
                 template_class = DynamicImageTemplate
 
-            template = template_class(template_config, annotation_manager)
-            self.templates.append(template)
+            try:
+                template = template_class(template_config, annotation_manager)
+                self.templates.append(template)
+            except Exception as e:
+                logging.warn("Could not load template with config:")
+                logging.warn(template_config) 
+                logging.error(e)
 
     def get_template_by_image_id(
         self,
@@ -232,3 +241,9 @@ class ImagesTemplatesManager:
 
     def get_templates(self) -> List[ImageTemplate]:
         return self.templates
+
+    def get_fixed_templates(self) -> List[ImageTemplate]:
+        return list(filter(lambda template: template.type == "FIXED" and not template.ignore, self.templates))
+
+    def get_dynamic_templates(self) -> List[ImageTemplate]:
+        return list(filter(lambda template: template.type == "DYNAMIC" and not template.ignore, self.templates))

@@ -102,13 +102,12 @@
         "image_id": 18,
         "type": "DYNAMIC",
         "background_path": "data/raw/templates/19_background.jpeg",
-        "max_patches": 5
+        "max_patches": 5,
+        "ignore": true
     },
     {
         "image_path": "data/raw/templates/20.jpeg",
         "image_id": 19,
-        "type": "DYNAMIC",
-        "background_path": "data/raw/templates/20_background.jpeg",
-        "max_patches": 3
+        "type": "FIXED"
     }
 ]

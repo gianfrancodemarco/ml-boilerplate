@@ -27,4 +27,6 @@ def show_image(
         cv2.addWeighted(overlay, alpha, image_copy, 1 - alpha, 0, image_copy)
 
     plt.figure()
-    return plt.imshow(image_copy)
+    plt.imshow(image_copy)
+    #plt.savefig('prediction.jpg')
+    

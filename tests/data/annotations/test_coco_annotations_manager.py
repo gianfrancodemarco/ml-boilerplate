@@ -8,10 +8,10 @@ from src.data.annotations.coco_annotations_manager import \
 ANNOTATIONS_PATH = os.path.join(utils.TESTS_PATH, 'assets', 'annotations.json')
 class TestsCocoAnnotationManager():
 
-    def test_get_annotations(self):
+    def test_get_image_annotations(self):
         annotations_manager = CocoAnnotationsManager(ANNOTATIONS_PATH)
         image_id = annotations_manager.get_image_id('1.jpeg')
-        annotations = annotations_manager.get_annotations(image_id=image_id)
+        annotations = annotations_manager.get_image_annotations(image_id=image_id)
         
         for annotation in annotations:
             for field in ["id", "bbox", "area"]:

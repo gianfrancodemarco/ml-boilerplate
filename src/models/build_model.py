@@ -21,7 +21,7 @@ def build_model(
         model = mlflow.tensorflow.load_model(model_version_uri) 
         logging.info(f"Loading registered model version from URI: '{model_version_uri}'")
     
-    except mlflow.exceptions.RestException: 
+    except (mlflow.exceptions.RestException, IndexError): 
 
         input_shape = (512, 512, 3)
         model = Sequential()

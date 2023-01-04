@@ -1,4 +1,3 @@
-import logging
 import os
 
 import mlflow
@@ -21,7 +20,7 @@ def get_datasets():
         images_base_path = os.path.join(utils.DATA_PATH, 'processed', split)
         images_paths =  [os.path.join(images_base_path, image['file_name']) for image in annotations_manager.get_images()]
         dataset_generator = ImagesDatasetGenerator(
-            images_paths=images_paths[:100],
+            images_paths=images_paths,
             annotations=annotations_manager.get_flattened_segmentations(),
             pad_annotations=50
         )
@@ -45,12 +44,15 @@ def configure_for_performance(ds):
 
 if __name__ == "__main__":
 
-    MODEL_NAME = "first_model"
+    MODEL_NAME = "third_model"
     MODEL_VERSION = 1
 
     train_set, validation_set = get_datasets()
 
+    # Fetches the corresponding model from MLFlow artifacts storage
+    # If it doesn't exists, creates a new model
     model = build_model(
+        dropout=0.3,
         model_name = MODEL_NAME,
         model_version = MODEL_VERSION
     )
@@ -61,14 +63,9 @@ if __name__ == "__main__":
         # and source code with the `autolog()` function
         mlflow.tensorflow.autolog()
 
-        for model in train_model(
+        train_model(
             model = model, 
             dataset = train_set,
             validation_dataset=validation_set,
-        ):
-
-            run_id = mlflow.active_run().info.run_id
-            artifact_path = "models"
-            model_uri = f"runs:/{run_id}/{artifact_path}"
-            model_details = mlflow.register_model(model_uri=model_uri, name=MODEL_NAME)
-            logging.info(f"Saved model at {model_details}")
+            model_name=MODEL_NAME
+        )

@@ -1,63 +1,81 @@
+import logging
+
+import mlflow
 from keras.layers import (Conv2D, Dense, Dropout, Flatten, Input, LeakyReLU,
                           MaxPooling2D)
 from keras.metrics import RootMeanSquaredError
 from keras.models import Sequential
 
 
-def build_model(dropout: float = 0):
-    input_shape = (512, 512, 3)
-    model = Sequential()
+def build_model(
+    model_name: str = None,
+    model_version: int = None,
+    dropout: float = 0
+):
+    
+    if not (model_name and model_version):
+        raise ValueError("You must provide a name and a version for the model")
 
-    model.add(Input(shape=input_shape))
+    try:
+        model_version_uri = f"models:/{model_name}/{model_version}"
+        model = mlflow.tensorflow.load_model(model_version_uri) 
+        logging.info(f"Loading registered model version from URI: '{model_version_uri}'")
+    
+    except mlflow.exceptions.RestException: 
 
-    # Only for 3 channel images
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+        input_shape = (512, 512, 3)
+        model = Sequential()
 
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Input(shape=input_shape))
 
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+        # Only for 3 channel images
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(Conv2D(32, 2))
-    model.add(LeakyReLU(alpha=0.01))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    model.add(Flatten())
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    if dropout:
-        model.add(Dropout(dropout))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Conv2D(32, 2))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    # Only for 3 channel images
-    model.add(Dense(128))
-    model.add(LeakyReLU(alpha=0.01))
+        model.add(Flatten())
 
-    model.add(Dense(50))
-    model.add(LeakyReLU(alpha=0.01))
+        if dropout:
+            model.add(Dropout(dropout))
 
-    model.build()
-    model.summary()
+        # Only for 3 channel images
+        model.add(Dense(128))
+        model.add(LeakyReLU(alpha=0.01))
 
-    model.compile(loss='mse', optimizer='adam', metrics=[RootMeanSquaredError()])
+        model.add(Dense(50))
+        model.add(LeakyReLU(alpha=0.01))
+
+        model.build()
+        model.summary()
+
+        model.compile(loss='mse', optimizer='adam', metrics=[RootMeanSquaredError()])
 
     return model

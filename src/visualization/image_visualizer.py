@@ -28,5 +28,5 @@ def show_image(
 
     plt.figure()
     plt.imshow(image_copy)
-    #plt.savefig('prediction.jpg')
+    plt.savefig('prediction.jpg')
     
